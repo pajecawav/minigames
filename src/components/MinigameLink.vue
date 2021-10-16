@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from "vue";
 import { RouterLink } from "vue-router";
 
 defineProps({

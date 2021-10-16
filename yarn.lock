@@ -291,6 +291,13 @@
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.19.tgz#f8e88059daa424515992426a0c7ea5cde07e99bf"
   integrity sha512-ObzQhgkoVeoyKv+e8+tB/jQBL2smtk/NmC9OmFK8UqdDpoOdv/Kf9pyDWL+IFyM7qLD2C75rszJujvGSPSpGlw==
 
+"@vue/eslint-config-typescript@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@vue/eslint-config-typescript/-/eslint-config-typescript-8.0.0.tgz#e7a5aa0cdf5f5d59e05f7ea310e8954a49b8fc41"
+  integrity sha512-8u8Qpg4qfjJoNeRMdHlxif9BcGy4iYSSK4YYW5AFPPRtkBJiCqtoyT72l4F3ZeZII09ax2N6yQeHbQ0CXQi1bA==
+  dependencies:
+    vue-eslint-parser "^7.0.0"
+
 "@vue/reactivity@3.2.20", "@vue/reactivity@^3.2.19":
   version "3.2.20"
   resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.2.20.tgz"
@@ -2317,7 +2324,7 @@ vue-demi@*:
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.4.tgz#6101992fe4724cf5634018a16e953f3052e94e2a"
   integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
 
-vue-eslint-parser@^7.10.0:
+vue-eslint-parser@^7.0.0, vue-eslint-parser@^7.10.0:
   version "7.11.0"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-7.11.0.tgz"
   integrity sha512-qh3VhDLeh773wjgNTl7ss0VejY9bMMa0GoDG2fQVyDzRFdiU3L7fw74tWZDHNQXdZqxO3EveQroa9ct39D2nqg==
