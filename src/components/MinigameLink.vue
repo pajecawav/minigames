@@ -11,6 +11,7 @@
 			bg-primary-800
 			text-primary-400
 			hover:text-secondary
+			transition-all
 			duration-300
 			transform
 			hover:shadow-md hover:-translate-y-1.5

@@ -1,58 +1,68 @@
 <template>
-	<div
-		class="
-			flex flex-col
-			items-center
-			justify-center
-			gap-2
-			w-full
-			h-full
-			text-primary-500
-		"
+	<!-- TODO: delegate appear animations to the router? -->
+	<Transition
+		enter-from-class="opacity-0"
+		enter-active-class="duration-500"
+		:appear="true"
 	>
 		<div
-			v-if="state === GameState.RULES"
-			class="grid place-items-center space-y-4"
+			class="
+				flex flex-col
+				items-center
+				justify-center
+				gap-2
+				w-full
+				h-full
+				text-primary-500
+			"
 		>
-			<div class="max-w-[36rem] text-center leading-relaxed">
-				<h1 class="text-secondary text-center text-5xl">
-					Reaction Time
-				</h1>
-				<p>
-					Wait for the
-					<span class="text-error">red</span> button to turn
-					<span class="text-success">green</span> and click it as
-					quickly as you can.
-				</p>
+			<div
+				v-if="state === GameState.RULES"
+				class="grid place-items-center space-y-4"
+			>
+				<div class="max-w-[36rem] text-center leading-relaxed">
+					<h1 class="text-secondary text-center text-5xl">
+						Reaction Time
+					</h1>
+					<p>
+						Wait for the
+						<span class="text-error">red</span> button to turn
+						<span class="text-success">green</span> and click it as
+						quickly as you can.
+					</p>
+				</div>
+				<Button @click="onRestart">Start</Button>
 			</div>
-			<Button @click="onRestart">Start</Button>
+
+			<button
+				v-else-if="playing"
+				:class="[
+					'w-full h-96 sm:h-80 flex items-center justify-center rounded-md text-6xl text-primary-800 focus:ring-2 focus:ring-secondary focus:ring-offset-4 focus:ring-offset-primary-700 focus:outline-none',
+					state === GameState.RED ? 'bg-error ' : 'bg-success',
+				]"
+				@click="onButtonClick"
+			>
+				{{ state === GameState.RED ? "Wait for green" : "Click!" }}
+			</button>
+
+			<div v-if="finished" class="grid gap-6 place-items-center">
+				<div
+					v-if="state === GameState.FAILED"
+					class="text-5xl text-error"
+				>
+					Clicked too soon
+				</div>
+
+				<div v-if="state === GameState.DONE" class="text-5xl">
+					Reaction time is
+					<span class="text-secondary">{{ reactionTime }}</span>
+					<span> ms</span>
+				</div>
+
+				<Button @click="onRestart">Restart</Button>
+			</div>
 		</div>
-
-		<button
-			v-else-if="playing"
-			:class="[
-				'w-full h-96 sm:h-80 flex items-center justify-center rounded-md text-6xl text-primary-800 focus:ring-2 focus:ring-secondary focus:ring-offset-4 focus:ring-offset-primary-700 focus:outline-none',
-				state === GameState.RED ? 'bg-error ' : 'bg-success',
-			]"
-			@click="onButtonClick"
-		>
-			{{ state === GameState.RED ? "Wait for green" : "Click!" }}
-		</button>
-
-		<div v-if="finished" class="grid gap-6 place-items-center">
-			<div v-if="state === GameState.FAILED" class="text-5xl text-error">
-				Clicked too soon
-			</div>
-
-			<div v-if="state === GameState.DONE" class="text-5xl">
-				Reaction time is
-				<span class="text-secondary">{{ reactionTime }}</span>
-				<span> ms</span>
-			</div>
-
-			<Button @click="onRestart">Restart</Button>
-		</div>
-	</div>
+	</Transition>
 </template>
 
 <script setup lang="ts">
