@@ -48,12 +48,15 @@
 			<div v-if="finished" class="grid gap-6 place-items-center">
 				<div
 					v-if="state === GameState.FAILED"
-					class="text-5xl text-error"
+					class="text-5xl text-error text-center"
 				>
 					Clicked too soon
 				</div>
 
-				<div v-if="state === GameState.DONE" class="text-5xl">
+				<div
+					v-if="state === GameState.DONE"
+					class="text-5xl text-center"
+				>
 					Reaction time is
 					<span class="text-secondary">{{ reactionTime }}</span>
 					<span> ms</span>

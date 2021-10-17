@@ -1,5 +1,5 @@
 <template>
-	<div class="grid gap-10 grid-cols-1 auto-rows-fr md:grid-cols-2">
+	<div class="grid gap-10 grid-cols-1 auto-rows-fr sm:grid-cols-2">
 		<Transition
 			v-for="game in minigames"
 			enter-from-class="scale-[0.8]"
@@ -7,7 +7,7 @@
 		>
 			<MinigameLink :to="game.link" :name="game.name">
 				<template v-if="game.icon" #icon>
-					<component class="w-24" :is="game.icon" />
+					<component class="w-16 sm:w-24" :is="game.icon" />
 				</template>
 			</MinigameLink>
 		</Transition>
