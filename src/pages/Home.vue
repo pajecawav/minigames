@@ -4,6 +4,7 @@
 			v-for="game in minigames"
 			enter-from-class="scale-[0.8]"
 			:appear="true"
+			:key="game.link"
 		>
 			<MinigameLink :to="game.link" :name="game.name">
 				<template v-if="game.icon" #icon>
@@ -26,5 +27,6 @@ interface Link {
 
 const minigames: Link[] = [
 	{ link: "/reaction-time", name: "Reaction Time", icon: LightningIcon },
+	{ link: "/number-memory", name: "Number Memory" },
 ];
 </script>
