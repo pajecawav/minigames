@@ -17,18 +17,16 @@
 		>
 			<div
 				v-if="state === GameState.RULES"
-				class="grid place-items-center space-y-4"
+				class="grid place-items-center space-y-4 text-center"
 			>
-				<h1 class="text-secondary text-center text-5xl">
-					Number Memory
-				</h1>
+				<h1 class="text-secondary text-5xl">Number Memory</h1>
 				<p>Remember the number</p>
 				<Button @click="onRestart">Start</Button>
 			</div>
 
 			<div
 				v-else-if="state === GameState.SHOW_NUMBER"
-				class="grid place-items-center space-y-4"
+				class="grid place-items-center space-y-4 max-w-full"
 			>
 				<div class="select-none text-7xl text-secondary">
 					{{ originalNumber }}
@@ -45,11 +43,11 @@
 
 			<div
 				v-else-if="state === GameState.GET_INPUT"
-				class="flex flex-col items-center gap-4"
+				class="flex flex-col items-center gap-4 max-w-full"
 			>
 				<div class="text-center">What was the number?</div>
 				<Input
-					class="text-center w-80"
+					class="text-center w-80 max-w-full"
 					v-model="userEntered"
 					@keyup.enter="onSubmit"
 				/>
@@ -58,7 +56,7 @@
 
 			<div
 				v-else-if="state === GameState.DONE"
-				class="flex flex-col items-center gap-8"
+				class="flex flex-col items-center gap-8 text-center"
 			>
 				<div class="text-6xl">
 					Level <span class="text-secondary">{{ level }}</span>
@@ -127,6 +125,10 @@ function onNextLevel() {
 }
 
 function onSubmit() {
+	if (!userEntered.value) {
+		return;
+	}
+
 	if (originalNumber.value === userEntered.value) {
 		level.value++;
 		onNextLevel();
