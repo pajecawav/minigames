@@ -73,7 +73,13 @@
 
 			<div
 				v-else-if="state === GameState.DONE"
-				class="flex flex-col items-center gap-8 text-center"
+				class="
+					flex flex-col
+					items-center
+					gap-8
+					text-center
+					animate-appear
+				"
 			>
 				<div class="text-6xl">
 					Level <span class="text-secondary">{{ levelRepr }}</span>

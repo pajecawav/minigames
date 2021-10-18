@@ -45,7 +45,10 @@
 				{{ state === GameState.RED ? "Wait for green" : "Click!" }}
 			</button>
 
-			<div v-if="finished" class="grid gap-6 place-items-center">
+			<div
+				v-if="finished"
+				class="grid gap-6 place-items-center animate-appear"
+			>
 				<div
 					v-if="state === GameState.FAILED"
 					class="text-5xl text-error text-center"

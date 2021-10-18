@@ -72,6 +72,12 @@ body::-webkit-scrollbar-thumb {
 	}
 }
 
+@keyframes appear {
+	0% {
+		opacity: 0;
+	}
+}
+
 @keyframes appear-zoom {
 	0% {
 		transform: scale(0.95);
