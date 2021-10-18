@@ -36,7 +36,7 @@
 				class="max-w-xl w-full flex flex-col gap-4"
 			>
 				<div class="select-none text-4xl text-center text-primary-500">
-					Level <span class="text-secondary">{{ level }}</span>
+					Level <span class="text-secondary">{{ levelRepr }}</span>
 				</div>
 				<div
 					class="grid w-full gap-2"
@@ -76,7 +76,7 @@
 				class="flex flex-col items-center gap-8 text-center"
 			>
 				<div class="text-6xl">
-					Level <span class="text-secondary">{{ level }}</span>
+					Level <span class="text-secondary">{{ levelRepr }}</span>
 				</div>
 				<Button @click="onRestart"> Restart </Button>
 			</div>
@@ -90,6 +90,7 @@ import Button from "../components/Button.vue";
 
 const HIDE_PATTERN_TIMEOUT = 2;
 const INITIAL_LIVES = 3;
+const MAX_FIELD_FILL_COEF = 0.3;
 
 enum GameState {
 	RULES,
@@ -111,17 +112,21 @@ function getEmptyField(width: number, height: number): CellState[] {
 const timeoutId = ref<number>();
 
 const state = ref<GameState>(GameState.RULES);
-const size = ref<number>(3);
+const level = ref<number>(2);
 const lives = ref(INITIAL_LIVES);
 const levelCells = ref<Set<number>>(new Set());
 const field = ref<CellState[]>([]);
 
-const level = computed(() => size.value - 2);
+const levelRepr = computed(() => level.value - 2);
+
+const size = computed(() =>
+	Math.floor(Math.sqrt(level.value / MAX_FIELD_FILL_COEF))
+);
 
 function onRestart() {
 	cleanup();
 
-	size.value = 2;
+	level.value = 2;
 
 	onNextLevel();
 }
@@ -130,7 +135,7 @@ function onNextLevel() {
 	state.value = GameState.SHOW_PATTERN;
 	lives.value = INITIAL_LIVES;
 
-	size.value++;
+	level.value++;
 	field.value = getEmptyField(size.value, size.value);
 	levelCells.value.clear();
 
@@ -138,7 +143,7 @@ function onNextLevel() {
 }
 
 function generateAndShowField() {
-	const cellsToGenerate = Math.floor(size.value * size.value * 0.35);
+	const cellsToGenerate = level.value;
 	levelCells.value.clear();
 
 	while (levelCells.value.size < cellsToGenerate) {
