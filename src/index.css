@@ -39,3 +39,31 @@ body::-webkit-scrollbar-thumb {
 	background-color: lightgrey;
 	border-radius: 20px;
 }
+
+@layer utilities {
+	.rotate-x-180 {
+		/* NOTE: breaks tailwind's transform utility */
+		transform: rotateX(180deg);
+	}
+}
+
+@keyframes shake {
+	0% {
+		transform: translateX(0px);
+	}
+	20% {
+		transform: translateX(-3px);
+	}
+	40% {
+		transform: translateX(3px);
+	}
+	60% {
+		transform: translateX(-3px);
+	}
+	80% {
+		transform: translateX(3px);
+	}
+	100% {
+		transform: translateX(0px);
+	}
+}

@@ -28,5 +28,6 @@ interface Link {
 const minigames: Link[] = [
 	{ link: "/reaction-time", name: "Reaction Time", icon: LightningIcon },
 	{ link: "/number-memory", name: "Number Memory" },
+	{ link: "/pattern-memory", name: "Pattern Memory" },
 ];
 </script>

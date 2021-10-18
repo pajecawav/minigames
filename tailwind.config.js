@@ -28,9 +28,11 @@ module.exports = {
 					...colors.yellow,
 					DEFAULT: colors.yellow["400"],
 				},
-				// TODO: better color names
 				success: colors.emerald[500],
 				error: colors.red[400],
+			},
+			animation: {
+				shake: "shake 0.2s ease-out",
 			},
 		},
 	},
