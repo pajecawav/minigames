@@ -45,10 +45,10 @@
 						'grid-template-columns': `repeat(${size}, minmax(0px, 1fr))`,
 					}"
 				>
-					<template v-for="(_, y) in size" :key="y">
+					<template v-for="(_, y) in size">
 						<button
 							v-for="(_, x) in size"
-							:key="x"
+							:key="`${x}-${y}`"
 							:class="[
 								'h-0 pb-[100%] rounded-md transition-all duration-300 ease-out',
 								{
