@@ -1,5 +1,5 @@
 <template>
-	<div class="grid gap-10 grid-cols-1 auto-rows-fr sm:grid-cols-2">
+	<div class="grid gap-4 sm:gap-6 grid-cols-1 auto-rows-fr sm:grid-cols-2">
 		<MinigameLink
 			v-for="game in minigames"
 			class="animate-appear-zoom no-tap-highlight"
@@ -28,5 +28,6 @@ const minigames: Link[] = [
 	{ link: "/reaction-time", name: "Reaction Time", icon: LightningIcon },
 	{ link: "/number-memory", name: "Number Memory" },
 	{ link: "/pattern-memory", name: "Pattern Memory" },
+	{ link: "/chimp-test", name: "Chimp Test" },
 ];
 </script>

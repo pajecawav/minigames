@@ -217,14 +217,3 @@ function cleanup() {
 
 onUnmounted(cleanup);
 </script>
-
-<style>
-@keyframes shrink {
-	from {
-		width: 100%;
-	}
-	to {
-		width: 0%;
-	}
-}
-</style>

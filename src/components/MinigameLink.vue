@@ -7,7 +7,7 @@
 			items-center
 			p-6
 			text-3xl text-center
-			sm:text-5xl
+			md:text-5xl
 			rounded-xl
 			bg-primary-800
 			text-primary-400

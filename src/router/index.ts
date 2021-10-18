@@ -1,3 +1,4 @@
+import ChimpTest from "@/pages/ChimpTest.vue";
 import Home from "@/pages/Home.vue";
 import NumberMemory from "@/pages/NumberMemory.vue";
 import PatternMemory from "@/pages/PatternMemory.vue";
@@ -9,6 +10,7 @@ const routes = [
 	{ path: "/reaction-time", component: ReactionTime },
 	{ path: "/number-memory", component: NumberMemory },
 	{ path: "/pattern-memory", component: PatternMemory },
+	{ path: "/chimp-test", component: ChimpTest },
 ];
 
 const router = createRouter({
