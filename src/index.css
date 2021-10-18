@@ -45,6 +45,10 @@ body::-webkit-scrollbar-thumb {
 		/* NOTE: breaks tailwind's transform utility */
 		transform: rotateX(180deg);
 	}
+
+	.no-tap-highlight {
+		-webkit-tap-highlight-color: transparent;
+	}
 }
 
 @keyframes shake {

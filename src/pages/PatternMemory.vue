@@ -50,7 +50,7 @@
 							v-for="(_, x) in size"
 							:key="`${x}-${y}`"
 							:class="[
-								'h-0 pb-[100%] rounded-md transition-all duration-300 animate-appear-zoom ease-out',
+								'h-0 pb-[100%] rounded-md transition-all duration-300 animate-appear-zoom ease-out no-tap-highlight',
 								{
 									'bg-primary-800':
 										getCellState(x, y) === CellState.IDLE,
