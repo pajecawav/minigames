@@ -95,6 +95,7 @@ import { computed, nextTick, onUnmounted, ref } from "vue";
 import Button from "../components/Button.vue";
 
 const HIDE_PATTERN_TIMEOUT = 2;
+const INITIAL_CELLS_AMOUNT = 3;
 const INITIAL_LIVES = 3;
 const MAX_FIELD_FILL_COEF = 0.3;
 
@@ -118,7 +119,7 @@ function getEmptyField(width: number, height: number): CellState[] {
 const timeoutId = ref<number>();
 
 const state = ref<GameState>(GameState.RULES);
-const level = ref<number>(2);
+const level = ref<number>(INITIAL_CELLS_AMOUNT);
 const lives = ref(INITIAL_LIVES);
 const levelCells = ref<Set<number>>(new Set());
 const field = ref<CellState[]>([]);
@@ -132,20 +133,30 @@ const size = computed(() =>
 function onRestart() {
 	cleanup();
 
-	level.value = 2;
+	level.value = INITIAL_CELLS_AMOUNT;
 
-	onNextLevel();
+	onNextLevel(true);
 }
 
-function onNextLevel() {
+function onNextLevel(restarted?: boolean) {
 	state.value = GameState.SHOW_PATTERN;
 	lives.value = INITIAL_LIVES;
 
-	level.value++;
 	field.value = getEmptyField(size.value, size.value);
 	levelCells.value.clear();
 
-	timeoutId.value = setTimeout(generateAndShowField, 0.75 * 1000);
+	timeoutId.value = setTimeout(() => {
+		// we need to delay increasing current level to avoid adding new cells
+		// to the grid before field reset animation is finished
+		if (!restarted) {
+			level.value++;
+		}
+
+		field.value = getEmptyField(size.value, size.value);
+		timeoutId.value = setTimeout(() => {
+			generateAndShowField();
+		}, 0.5 * 1000);
+	}, 0.5 * 1000);
 }
 
 function generateAndShowField() {
