@@ -29,5 +29,6 @@ const minigames: Link[] = [
 	{ link: "/number-memory", name: "Number Memory" },
 	{ link: "/pattern-memory", name: "Pattern Memory" },
 	{ link: "/chimp-test", name: "Chimp Test" },
+	{ link: "/typing-speed", name: "Typing Speed" },
 ];
 </script>
