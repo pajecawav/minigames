@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { onKeyDown, onKeyPressed } from "@vueuse/core";
+import { onKeyDown, onKeyPressed, useIntervalFn } from "@vueuse/core";
 import { computed, ref } from "vue";
 import Button from "../components/Button.vue";
 import SpinnerIcon from "../icons/SpinnerIcon.vue";
@@ -107,6 +107,8 @@ enum GameState {
 	DONE,
 }
 
+const recalculateWpmIntervalId = ref<number>();
+
 const state = ref<GameState>(GameState.RULES);
 const text = ref<string>("");
 const currentIndex = ref<number>(0);
@@ -117,20 +119,24 @@ const lastLetterWasCorrect = ref<boolean>(true);
 const typedWords = ref<number>(0);
 const typedLetters = ref<number>(0);
 
-const wpm = computed(() => {
-	if (!startedAt.value) {
-		return 0;
-	}
-	const endTime = endedAt.value ?? Date.now();
-	return Math.round(
-		(typedWords.value / (endTime - startedAt.value)) * 1000 * 60
-	);
-});
+const wpm = ref<number>(0);
 const currentLetter = computed(() => text.value[currentIndex.value]);
 const totalWords = computed(() => text.value.split(" ").filter(x => x).length);
 const accuracy = computed(() =>
 	Math.round((100 * currentIndex.value) / typedLetters.value)
 );
+
+// recalculate wpm each second
+useIntervalFn(() => {
+	if (!startedAt.value) {
+		wpm.value = 0;
+	} else {
+		const endTime = endedAt.value ?? Date.now();
+		wpm.value = Math.round(
+			(typedWords.value / (endTime - startedAt.value)) * 1000 * 60
+		);
+	}
+}, 1 * 1000);
 
 function onRestart() {
 	state.value = GameState.LOADING;
