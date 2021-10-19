@@ -43,20 +43,36 @@
 				>
 					{{ typedWords }}/{{ totalWords }}
 				</div>
-				<div class="font-mono leading-10 select-none">
+				<div class="relative font-mono leading-10 select-none">
+					<div
+						:class="[
+							'absolute text-transparent bg-secondary transition-all duration-100 ease-linear',
+							{
+								'bg-error/50': !lastLetterWasCorrect,
+							},
+						]"
+						:style="[
+							'z-index: -1',
+							{
+								left: caretPosition.left + 'px',
+								top: caretPosition.top + 'px',
+							},
+						]"
+					>
+						<!-- invisible letter to give the caret a single character width -->
+						a
+					</div>
+
 					<span
 						v-for="(letter, index) of text.split('')"
 						:class="[
-							'whitespace-pre-wrap',
+							'whitespace-pre-wrap transition-colors duration-100',
 							{
 								'text-primary-300': index < currentIndex,
-								'bg-secondary': index === currentIndex,
 								'text-primary-600': index > currentIndex,
-								'bg-error/50':
-									index === currentIndex &&
-									!lastLetterWasCorrect,
 							},
 						]"
+						:ref="getRefForLetter(index)"
 						:key="index"
 						>{{ letter }}</span
 					>
@@ -96,7 +112,7 @@
 
 <script setup lang="ts">
 import { onKeyDown, onKeyPressed, useIntervalFn } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, reactive, Ref, ref, watch } from "vue";
 import Button from "../components/Button.vue";
 import SpinnerIcon from "../icons/SpinnerIcon.vue";
 
@@ -106,8 +122,6 @@ enum GameState {
 	TYPING,
 	DONE,
 }
-
-const recalculateWpmIntervalId = ref<number>();
 
 const state = ref<GameState>(GameState.RULES);
 const text = ref<string>("");
@@ -126,8 +140,13 @@ const accuracy = computed(() =>
 	Math.round((100 * currentIndex.value) / typedLetters.value)
 );
 
-// recalculate wpm each second
-useIntervalFn(() => {
+const caretPosition = reactive<{ top: number; left: number }>({
+	top: 0,
+	left: 0,
+});
+const currentLetterRef = ref<HTMLSpanElement>();
+
+function recalculateWpm() {
 	if (!startedAt.value) {
 		wpm.value = 0;
 	} else {
@@ -136,7 +155,7 @@ useIntervalFn(() => {
 			(typedWords.value / (endTime - startedAt.value)) * 1000 * 60
 		);
 	}
-}, 1 * 1000);
+}
 
 function onRestart() {
 	state.value = GameState.LOADING;
@@ -147,11 +166,14 @@ function onRestart() {
 	typedLetters.value = 0;
 	lastLetterWasCorrect.value = true;
 
+	caretPosition.top = 0;
+	caretPosition.left = 0;
+
 	fetch("https://api.quotable.io/random")
 		.then(response => response.json())
 		.then(json => {
 			const quote = json.content as string;
-			text.value = quote.replaceAll("  ", " ");
+			text.value = quote.replaceAll("  ", " ").replaceAll("’", "'");
 
 			state.value = GameState.TYPING;
 		});
@@ -160,7 +182,10 @@ function onRestart() {
 function onFinished() {
 	state.value = GameState.DONE;
 	endedAt.value = Date.now();
+	recalculateWpm();
 }
+
+useIntervalFn(recalculateWpm, 1 * 1000);
 
 onKeyPressed(
 	() => true,
@@ -190,6 +215,21 @@ onKeyPressed(
 		}
 	}
 );
+
+// HACK: currentLetterRef is unwrapped inside the :ref binding so we use a
+// separate function for returning it
+function getRefForLetter(index: number): Ref<any> | undefined {
+	return index === currentIndex.value ? currentLetterRef : undefined;
+}
+
+watch(currentLetterRef, () => {
+	if (!currentLetterRef.value) {
+		return;
+	}
+
+	caretPosition.left = currentLetterRef.value.offsetLeft;
+	caretPosition.top = currentLetterRef.value.offsetTop;
+});
 
 // restart the game on Ctrl Enter
 onKeyDown("Enter", event => {
