@@ -72,7 +72,11 @@
 								'text-primary-600': index > currentIndex,
 							},
 						]"
-						:ref="getRefForLetter(index)"
+						:id="
+							index === currentIndex
+								? 'current-letter'
+								: undefined
+						"
 						:key="index"
 						>{{ letter }}</span
 					>
@@ -112,7 +116,7 @@
 
 <script setup lang="ts">
 import { onKeyDown, onKeyPressed, useIntervalFn } from "@vueuse/core";
-import { computed, reactive, Ref, ref, watch } from "vue";
+import { computed, nextTick, reactive, ref, watch } from "vue";
 import Button from "../components/Button.vue";
 import SpinnerIcon from "../icons/SpinnerIcon.vue";
 
@@ -144,7 +148,6 @@ const caretPosition = reactive<{ top: number; left: number }>({
 	top: 0,
 	left: 0,
 });
-const currentLetterRef = ref<HTMLSpanElement>();
 
 function recalculateWpm() {
 	if (!startedAt.value) {
@@ -216,19 +219,16 @@ onKeyPressed(
 	}
 );
 
-// HACK: currentLetterRef is unwrapped inside the :ref binding so we use a
-// separate function for returning it
-function getRefForLetter(index: number): Ref<any> | undefined {
-	return index === currentIndex.value ? currentLetterRef : undefined;
-}
-
-watch(currentLetterRef, () => {
-	if (!currentLetterRef.value) {
-		return;
-	}
-
-	caretPosition.left = currentLetterRef.value.offsetLeft;
-	caretPosition.top = currentLetterRef.value.offsetTop;
+// HACK: there are some perfomance issues with dynamic refs that cause animation
+// stuttering so for now we use an id and a query selector
+watch(currentIndex, () => {
+	nextTick(() => {
+		const currentLetterElem = document.getElementById("current-letter");
+		if (currentLetterElem) {
+			caretPosition.left = currentLetterElem.offsetLeft;
+			caretPosition.top = currentLetterElem.offsetTop;
+		}
+	});
 });
 
 // restart the game on Ctrl Enter
