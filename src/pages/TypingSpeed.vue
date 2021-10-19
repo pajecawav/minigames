@@ -152,7 +152,7 @@ function recalculateWpm() {
 	} else {
 		const endTime = endedAt.value ?? Date.now();
 		wpm.value = Math.round(
-			(typedWords.value / (endTime - startedAt.value)) * 1000 * 60
+			(currentIndex.value / 5 / (endTime - startedAt.value)) * 1000 * 60
 		);
 	}
 }
