@@ -34,7 +34,6 @@ module.exports = {
 			animation: {
 				shake: "shake 0.2s ease-out",
 				appear: "appear 0.2s ease-out",
-				"appear-zoom": "appear-zoom 0.2s ease-out",
 			},
 		},
 	},

@@ -12,9 +12,7 @@
 			bg-primary-800
 			text-primary-400
 			hover:text-secondary
-			transition-all
-			duration-300
-			transform
+			duration-200
 			hover:shadow-md hover:-translate-y-1.5
 			focus:ring-2
 			focus:ring-secondary

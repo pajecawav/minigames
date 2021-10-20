@@ -1,87 +1,75 @@
 <template>
-	<Transition
-		enter-from-class="opacity-0"
-		enter-active-class="duration-500"
-		:appear="true"
+	<div
+		class="
+			flex flex-col
+			items-center
+			justify-center
+			gap-2
+			w-full
+			h-full
+			text-primary-500
+		"
 	>
 		<div
-			class="
-				flex flex-col
-				items-center
-				justify-center
-				gap-2
-				w-full
-				h-full
-				text-primary-500
-			"
+			v-if="state === GameState.RULES"
+			class="grid place-items-center space-y-4 text-center"
 		>
-			<div
-				v-if="state === GameState.RULES"
-				class="grid place-items-center space-y-4 text-center"
-			>
-				<div class="max-w-[36rem] text-center leading-relaxed">
-					<h1 class="text-secondary text-5xl">Pattern Memory</h1>
-					<p>Click the squares in order according to their numbers</p>
-				</div>
-				<Button @click="onRestart">Start</Button>
+			<div class="max-w-[36rem] text-center leading-relaxed">
+				<h1 class="text-secondary text-5xl">Pattern Memory</h1>
+				<p>Click the squares in order according to their numbers</p>
 			</div>
+			<Button @click="onRestart">Start</Button>
+		</div>
 
+		<div
+			v-else-if="
+				state === GameState.SHOW_PATTERN ||
+				state === GameState.GET_INPUT
+			"
+			class="w-full flex flex-col gap-8"
+		>
+			<div class="select-none text-4xl text-center text-primary-500">
+				Numbers <span class="text-secondary">{{ level }}</span>
+			</div>
 			<div
-				v-else-if="
-					state === GameState.SHOW_PATTERN ||
-					state === GameState.GET_INPUT
-				"
-				class="w-full flex flex-col gap-8"
+				class="grid w-full gap-2"
+				:style="{
+					'grid-template-rows': `repeat(${HEIGHT}, minmax(0px, 1fr))`,
+					'grid-template-columns': `repeat(${WIDTH}, minmax(0px, 1fr))`,
+				}"
 			>
-				<div class="select-none text-4xl text-center text-primary-500">
-					Numbers <span class="text-secondary">{{ level }}</span>
-				</div>
-				<div
-					class="grid w-full gap-2"
-					:style="{
-						'grid-template-rows': `repeat(${HEIGHT}, minmax(0px, 1fr))`,
-						'grid-template-columns': `repeat(${WIDTH}, minmax(0px, 1fr))`,
-					}"
+				<button
+					v-for="(value, index) in field"
+					:key="index"
+					:class="[
+						'flex items-center justify-center text-secondary sm:text-5xl border-4 rounded-md no-tap-highlight',
+						value === null &&
+							'border-transparent pointer-events-none',
+						value !== null && {
+							'border-primary-800 ':
+								state === GameState.SHOW_PATTERN,
+							'bg-secondary border-transparent':
+								state === GameState.GET_INPUT,
+						},
+					]"
+					@click="onClick(index)"
 				>
-					<button
-						v-for="(value, index) in field"
-						:key="index"
-						:class="[
-							'flex items-center justify-center text-secondary sm:text-5xl border-4 rounded-md no-tap-highlight',
-							value === null &&
-								'border-transparent pointer-events-none',
-							value !== null && {
-								'border-primary-800 ':
-									state === GameState.SHOW_PATTERN,
-								'bg-secondary border-transparent':
-									state === GameState.GET_INPUT,
-							},
-						]"
-						@click="onClick(index)"
-					>
-						{{ state === GameState.SHOW_PATTERN ? value : null }}
-						<div class="h-0 pb-[100%]" />
-					</button>
-				</div>
-			</div>
-
-			<div
-				v-else-if="state === GameState.DONE"
-				class="
-					flex flex-col
-					items-center
-					gap-8
-					text-center
-					animate-appear
-				"
-			>
-				<div class="text-6xl">
-					Numbers <span class="text-secondary">{{ level }}</span>
-				</div>
-				<Button @click="onRestart"> Restart </Button>
+					{{ state === GameState.SHOW_PATTERN ? value : null }}
+					<div class="h-0 pb-[100%]" />
+				</button>
 			</div>
 		</div>
-	</Transition>
+
+		<div
+			v-else-if="state === GameState.DONE"
+			class="flex flex-col items-center gap-8 text-center animate-appear"
+		>
+			<div class="text-6xl">
+				Numbers <span class="text-secondary">{{ level }}</span>
+			</div>
+			<Button @click="onRestart"> Restart </Button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">

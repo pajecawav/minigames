@@ -1,117 +1,101 @@
 <template>
-	<Transition
-		enter-from-class="opacity-0"
-		enter-active-class="duration-500"
-		:appear="true"
+	<div
+		class="
+			flex flex-col
+			items-center
+			justify-center
+			gap-2
+			w-full
+			h-full
+			text-primary-500
+		"
 	>
 		<div
-			class="
-				flex flex-col
-				items-center
-				justify-center
-				gap-2
-				w-full
-				h-full
-				text-primary-500
-			"
+			v-if="state === GameState.RULES"
+			class="grid place-items-center space-y-4 text-center"
+		>
+			<div class="max-w-[36rem] text-center leading-relaxed">
+				<h1 class="text-secondary text-5xl">Typing Speed</h1>
+				<p>Type as fast as you can</p>
+			</div>
+			<Button @click="onRestart">Start</Button>
+		</div>
+
+		<SpinnerIcon
+			v-else-if="state === GameState.LOADING"
+			class="w-32 m-auto text-secondary animate-spin"
+		/>
+
+		<div
+			v-else-if="state === GameState.TYPING"
+			class="w-full flex flex-col gap-4"
 		>
 			<div
-				v-if="state === GameState.RULES"
-				class="grid place-items-center space-y-4 text-center"
+				:class="[
+					'text-center text-8xl text-primary-500 duration-100',
+					{ 'opacity-0': typedLetters === 0 },
+				]"
 			>
-				<div class="max-w-[36rem] text-center leading-relaxed">
-					<h1 class="text-secondary text-5xl">Typing Speed</h1>
-					<p>Type as fast as you can</p>
-				</div>
-				<Button @click="onRestart">Start</Button>
+				{{ typedWords }}/{{ totalWords }}
 			</div>
-
-			<SpinnerIcon
-				v-else-if="state === GameState.LOADING"
-				class="w-32 m-auto text-secondary animate-spin"
-			/>
-
-			<div
-				v-else-if="state === GameState.TYPING"
-				class="w-full flex flex-col gap-4"
-			>
+			<div class="relative font-mono leading-10 select-none">
 				<div
 					:class="[
-						'text-center text-8xl text-primary-500 duration-100',
-						{ 'opacity-0': typedLetters === 0 },
+						'absolute text-transparent bg-secondary transition-all duration-100 ease-linear',
+						{
+							'bg-error/50': !lastLetterWasCorrect,
+						},
+					]"
+					:style="[
+						'z-index: -1',
+						{
+							left: caretPosition.left + 'px',
+							top: caretPosition.top + 'px',
+						},
 					]"
 				>
-					{{ typedWords }}/{{ totalWords }}
+					<!-- invisible letter to give the caret a single character width -->
+					a
 				</div>
-				<div class="relative font-mono leading-10 select-none">
-					<div
-						:class="[
-							'absolute text-transparent bg-secondary transition-all duration-100 ease-linear',
-							{
-								'bg-error/50': !lastLetterWasCorrect,
-							},
-						]"
-						:style="[
-							'z-index: -1',
-							{
-								left: caretPosition.left + 'px',
-								top: caretPosition.top + 'px',
-							},
-						]"
-					>
-						<!-- invisible letter to give the caret a single character width -->
-						a
-					</div>
 
-					<span
-						v-for="(letter, index) of text.split('')"
-						:class="[
-							'whitespace-pre-wrap transition-colors duration-100',
-							{
-								'text-primary-300': index < currentIndex,
-								'text-primary-600': index > currentIndex,
-							},
-						]"
-						:id="
-							index === currentIndex
-								? 'current-letter'
-								: undefined
-						"
-						:key="index"
-						>{{ letter }}</span
-					>
-				</div>
-				<div
+				<span
+					v-for="(letter, index) of text.split('')"
 					:class="[
-						'text-center text-8xl text-primary-500 duration-100',
-						{ 'opacity-0': typedLetters === 0 },
+						'whitespace-pre-wrap transition-colors duration-100',
+						{
+							'text-primary-300': index < currentIndex,
+							'text-primary-600': index > currentIndex,
+						},
 					]"
+					:id="index === currentIndex ? 'current-letter' : undefined"
+					:key="index"
+					>{{ letter }}</span
 				>
-					{{ wpm }} {{ accuracy }}%
-				</div>
 			</div>
-
 			<div
-				v-else-if="state === GameState.DONE"
-				class="
-					flex flex-col
-					items-center
-					gap-8
-					text-center
-					animate-appear
-				"
+				:class="[
+					'text-center text-8xl text-primary-500 duration-100',
+					{ 'opacity-0': typedLetters === 0 },
+				]"
 			>
-				<div class="text-8xl text-primary-500">
-					wpm: <span class="text-secondary">{{ wpm }}</span>
-				</div>
-				<div class="text-8xl text-primary-500">
-					acc: <span class="text-secondary">{{ accuracy }}</span
-					>%
-				</div>
-				<Button @click="onRestart"> Restart </Button>
+				{{ wpm }} {{ accuracy }}%
 			</div>
 		</div>
-	</Transition>
+
+		<div
+			v-else-if="state === GameState.DONE"
+			class="flex flex-col items-center gap-8 text-center animate-appear"
+		>
+			<div class="text-8xl text-primary-500">
+				wpm: <span class="text-secondary">{{ wpm }}</span>
+			</div>
+			<div class="text-8xl text-primary-500">
+				acc: <span class="text-secondary">{{ accuracy }}</span
+				>%
+			</div>
+			<Button @click="onRestart"> Restart </Button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -176,7 +160,10 @@ function onRestart() {
 		.then(response => response.json())
 		.then(json => {
 			const quote = json.content as string;
-			text.value = quote.replaceAll("  ", " ").replaceAll("’", "'");
+			text.value = quote
+				.replaceAll("  ", " ")
+				.replaceAll("’", "'")
+				.replaceAll("‘", "'");
 
 			state.value = GameState.TYPING;
 		});

@@ -9,7 +9,14 @@
 		</header>
 
 		<div class="text-3xl flex-grow">
-			<RouterView />
+			<RouterView v-slot="{ Component }">
+				<Transition
+					enter-from-class="opacity-0"
+					enter-active-class="duration-200"
+				>
+					<component :is="Component" />
+				</Transition>
+			</RouterView>
 		</div>
 	</div>
 </template>
