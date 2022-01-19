@@ -22,16 +22,15 @@
 
 <script setup lang="ts">
 import MinigameLink from "../components/MinigameLink.vue";
-import LightningIcon from "../icons/LightningIcon.vue";
 
 interface Link {
 	link: string;
 	name: string;
-	icon?: Object;
+	icon?: any;
 }
 
 const minigames: Link[] = [
-	{ link: "/reaction-time", name: "Reaction Time", icon: LightningIcon },
+	{ link: "/reaction-time", name: "Reaction Time" },
 	{ link: "/number-memory", name: "Number Memory" },
 	{ link: "/pattern-memory", name: "Pattern Memory" },
 	{ link: "/chimp-test", name: "Chimp Test" },

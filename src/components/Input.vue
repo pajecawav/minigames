@@ -4,20 +4,30 @@
 		:value="modelValue"
 		@input="onUpdate"
 		v-bind="$attrs"
+		autofocus
+		ref="elementRef"
 	/>
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from "vue";
+import { defineEmits, defineProps, useAttrs, nextTick, ref } from "vue";
 
 defineProps({
 	modelValue: String,
 });
 
+const attrs = useAttrs();
 const emit = defineEmits(["update:modelValue"]);
+const elementRef = ref();
 
 const onUpdate = (event: Event) => {
 	event = event as InputEvent;
 	emit("update:modelValue", (event.target as HTMLInputElement).value);
 };
+
+if (attrs.autofocus) {
+	nextTick(() => {
+		elementRef.value.focus();
+	});
+}
 </script>

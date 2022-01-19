@@ -37,6 +37,7 @@
 				class="text-center w-80 max-w-full"
 				v-model="userEntered"
 				@keyup.enter="onSubmit"
+				:autofocus="true"
 			/>
 			<Button @click="onSubmit">Submit</Button>
 		</div>
