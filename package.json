@@ -5,8 +5,9 @@
 		"dev": "vite",
 		"build": "vue-tsc --noEmit && vite build",
 		"serve": "vite preview",
-		"lint": "eslint './src/**/*.{js,ts,tsx,vue,md}'",
-		"lint:fix": "eslint './src/**/*.{js,ts,tsx,vue,md}' --fix"
+		"lint": "eslint './src/**/*.{js,jsx,ts,tsx,vue,md}'",
+		"lint:fix": "eslint './src/**/*.{js,jsx,ts,tsx,vue,md}' --fix",
+		"format": "prettier 'src/**/*.{js,jsx,ts,tsx,vue,css}' --write"
 	},
 	"dependencies": {
 		"@vueuse/core": "^6.5.3",

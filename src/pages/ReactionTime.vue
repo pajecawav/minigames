@@ -6,15 +6,7 @@
 		:appear="true"
 	>
 		<div
-			class="
-				flex flex-col
-				items-center
-				justify-center
-				gap-2
-				w-full
-				h-full
-				text-primary-500
-			"
+			class="flex flex-col items-center justify-center gap-2 w-full h-full text-primary-500"
 		>
 			<div
 				v-if="state === GameState.RULES"

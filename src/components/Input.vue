@@ -1,21 +1,6 @@
 <template>
 	<input
-		class="
-			px-2
-			py-1
-			bg-primary-800
-			placeholder-primary-400
-			border-2
-			transition-colors
-			duration-50
-			border-primary-800
-			rounded
-			outline-none
-			appearance-none
-			font-sm
-			text-primary-200
-			focus:border-secondary
-		"
+		class="px-2 py-1 bg-primary-800 placeholder-primary-400 border-2 transition-colors duration-50 border-primary-800 rounded outline-none appearance-none font-sm text-primary-200 focus:border-secondary"
 		:value="modelValue"
 		@input="onUpdate"
 		v-bind="$attrs"
