@@ -1,9 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-	purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
-	mode: "jit",
-	darkMode: false, // or 'media' or 'class'
+	content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
 	theme: {
 		fontFamily: {
 			mono: [
@@ -22,7 +20,7 @@ module.exports = {
 			colors: {
 				button: colors.white,
 				primary: {
-					...colors.trueGray,
+					...colors.neutral,
 				},
 				secondary: {
 					...colors.yellow,
